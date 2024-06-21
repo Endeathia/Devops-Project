@@ -1,0 +1,27 @@
+version: '3'
+services:
+  polybot:
+    image: tamer153/polybot:2.7
+    container_name: polybot
+    ports:
+      - "8443:8443"
+    environment:
+      - BUCKET_NAME='tamerawsbucket'
+      - telegram_chat_url='Tamer-Load-Balancer-1677582904.us-west-1.elb.amazonaws.com'
+    secrets:
+      - my_secret
+    volumes:
+      - C:\Users\failc\.aws:/root/.aws
+
+      
+    networks:
+    - mongo-network
+
+networks:
+  mongo-network:
+    driver: bridge
+
+secrets:
+  my_secret:
+    file: .env
+
