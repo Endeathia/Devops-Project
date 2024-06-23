@@ -8,14 +8,12 @@ import sys
 import signal
 from threading import Thread
 import requests
+import time
 
 app = flask.Flask(__name__)
 
 
 # TODO load TELEGRAM_TOKEN value from Secret Manager
-
-
-
 secrets_manager_client = boto3.client('secretsmanager', region_name='us-west-1')
 secret_name = 'TELEGRAM_TOKEN_NEW'
 response = secrets_manager_client.get_secret_value(SecretId=secret_name)
@@ -30,7 +28,7 @@ def handle_sigterm(*args):
 
 signal.signal(signal.SIGTERM, handle_sigterm)
 
-@app.route('/health')
+@app.route('/liveness')
 def health_check():
     if all_required_services_are_running():
         return 'OK', 200
@@ -39,6 +37,11 @@ def health_check():
 
 def all_required_services_are_running():
     return True
+
+@app.route('/readiness')
+def healthz():
+  time.sleep(20);
+  return "Readiness check completed"
 
 @app.route('/', methods=['GET'])
 def index():
