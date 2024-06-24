@@ -6,14 +6,12 @@ import boto3
 import json
 import sys
 import signal
-from threading import Thread
 import requests
 import time
 
 app = flask.Flask(__name__)
 
-
-# TODO load TELEGRAM_TOKEN value from Secret Manager
+# Load TELEGRAM_TOKEN value from Secret Manager
 secrets_manager_client = boto3.client('secretsmanager', region_name='us-west-1')
 secret_name = 'TELEGRAM_TOKEN_NEW'
 response = secrets_manager_client.get_secret_value(SecretId=secret_name)
@@ -28,25 +26,27 @@ def handle_sigterm(*args):
 
 signal.signal(signal.SIGTERM, handle_sigterm)
 
+def all_required_services_are_running():
+    # Perform actual checks to ensure required services are running
+    return True
+
 @app.route('/liveness')
-def health_check():
+def liveness():
     if all_required_services_are_running():
         return 'OK', 200
     else:
         return 'Service Unavailable', 500
 
-def all_required_services_are_running():
-    return True
-
 @app.route('/readiness')
-def healthz():
-  time.sleep(20);
-  return "Readiness check completed"
+def readiness():
+    if all_required_services_are_running():
+        return 'Ready', 200
+    else:
+        return 'Service Unavailable', 500
 
 @app.route('/', methods=['GET'])
 def index():
     return 'Ok'
-
 
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
 def webhook():
@@ -54,12 +54,11 @@ def webhook():
     bot.handle_message(req['message'])
     return 'Ok'
 
-
 @app.route(f'/results/', methods=['GET', 'POST'])
 def results():
     prediction_id = request.args.get('predictionId')
 
-    # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
+    # Retrieve results from DynamoDB and send to the end-user
     dynamodb = boto3.resource('dynamodb', region_name='us-west-1')
     table_name = 'Yolo-Project'
     table = dynamodb.Table(table_name)
@@ -70,13 +69,11 @@ def results():
     )
     item = response.get('Item')
 
-
     chat_id = item.get('chat_id')
     text_results = item.get('labels')
 
     bot.send_text(chat_id, text_results)
     return 'Ok'
-
 
 @app.route(f'/loadTest/', methods=['POST'])
 def load_test():
@@ -87,13 +84,10 @@ def load_test():
 def run_flask():
     app.run(host='0.0.0.0')
 
-
-
 if __name__ == "__main__":
     bot = ObjectDetectionBot(TELEGRAM_TOKEN, telegram_chat_url)
     app.run(host='0.0.0.0', port=8443, debug=True)
 
-
-response = requests.get('http://127.0.0.1:8443/health')
+response = requests.get('http://127.0.0.1:8443/liveness')
 print(response.status_code)
 print(response.text)
