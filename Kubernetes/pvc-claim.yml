@@ -4,14 +4,13 @@ metadata:
   name: grafana-pv
 spec:
   capacity:
-    storage: 10Gi
+    storage: 2Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: gp2
-  csi:
-    driver: ebs.csi.aws.com
-    volumeHandle: vol-049808355a6a1c183  # Replace with your AWS EBS volume ID
+  awsElasticBlockStore:
+    volumeID: vol-09e94d170f0681385
     fsType: ext4
 
 
@@ -20,12 +19,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grafana
-  namespace: tamer
+  name: grafana-pvc
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: gp2
   resources:
     requests:
-      storage: 10Gi
+      storage: 2Gi
+  storageClassName: gp2
