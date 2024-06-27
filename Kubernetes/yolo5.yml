@@ -1,44 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: polybot-deployment
+  name: yolo5-deployment
   labels:
-    app: polybot
+    app: yolo5
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: polybot
+      app: yolo5
   template:
     metadata:
       labels:
-        app: polybot
+        app: yolo5
     spec:
       serviceAccountName: yolov5-sa
       terminationGracePeriodSeconds: 30
       containers:
-      - name: polybot
-        image: tamer153/polybot-k8s:1.0.7
+      - name: yolo5
+        image: tamer153/yolov5-k8s:1.0.14
         ports:
-        - containerPort: 8443
+        - containerPort: 80
         env:
-        - name: bucket
+        - name: BUCKET_NAME
           value: tamerawsbucket
-        - name: queue_url
+        - name: SQS_QUEUE_NAME
           value: https://sqs.us-east-1.amazonaws.com/933060838752/tamer-sqs
-        - name: telegram_chat_url
-          value: tamer.atech-bot.click
         resources:
           requests:
-            memory: "512Mi"
-            cpu: "500m"
+            memory: "512Mi"  # Increased memory request to 512Mi
+            cpu: "200m"      # Increased CPU request to 200m
           limits:
-            memory: "1024Mi"
-            cpu: "2000m"
+            memory: "2048Mi" # Increased memory limit to 2048Mi
+            cpu: "1000m"     # Increased CPU limit to 1000m"
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 8443
+            port: 80
           initialDelaySeconds: 15
           timeoutSeconds: 2
           periodSeconds: 5
@@ -46,7 +44,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /readiness
-            port: 8443
+            port: 80
           initialDelaySeconds: 10
           timeoutSeconds: 3
           periodSeconds: 10
@@ -56,16 +54,32 @@ spec:
 
 apiVersion: v1
 kind: Service
-metadata:
-  name: polybot-service
+metadata:  
+  name: yolo5-service
 spec:
-  selector:
-    app: polybot
-  ports:
-    - protocol: TCP
-      port: 8443
-      targetPort: 8443
+  selector:    
+    app: yolo5
+  type: NodePort
+  ports:  
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
 
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: yolo5
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: yolo5
+ minReplicas: 2
+ maxReplicas: 5
+ targetCPUUtilizationPercentage: 50
 
 ---
 

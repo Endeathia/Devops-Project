@@ -10,8 +10,8 @@ import json
 
 s3 = boto3.client('s3')
 bucket = 'tamerawsbucket'
-queue_url = 'tamer-jobs'
-sqs_client = boto3.client('sqs', region_name='us-west-1')
+queue_url = 'tamer-sqs'
+sqs_client = boto3.client('sqs', region_name='us-east-1')
 CERTIFICATE_FILE_NAME = "YOURPUBLIC.pem"
 telegram_chat_url = os.environ['telegram_chat_url']
 telegram_chat_url = f'https://{telegram_chat_url}'
