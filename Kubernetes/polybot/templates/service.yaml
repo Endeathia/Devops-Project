@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "polybot.fullname" . }}
+  labels:
+    {{- include "polybot.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "polybot.selectorLabels" . | nindent 4 }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: polybot-service
+spec:
+  selector:
+    app: polybot
+  ports:
+    - protocol: TCP
+      port: 8443
+      targetPort: 8443
