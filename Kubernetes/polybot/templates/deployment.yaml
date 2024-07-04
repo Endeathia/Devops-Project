@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: polybot
-        image: tamer153/polybot-k8s:1.0.7
+        image: {{ .Values.img }}
         ports:
         - containerPort: {{ .Values.MainPort }}
         env:
