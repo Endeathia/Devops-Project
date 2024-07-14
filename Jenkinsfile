@@ -13,27 +13,7 @@ pipeline {
                 git branch: 'main', credentialsId: 'GitHubJuly', url: 'https://github.com/Endeathia/Devops-Project.git'
             }
         }
-        
-        stage('Sonarqube Analysis') {
-            steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh '''$SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.projectName=MicroServiceApp \
-                    -Dsonar.projectKey=MicroServiceApp \
-                    -Dsonar.sources=polybot,yolov5 '''
-                }
-            }
-        }
-        
-        stage('Quality Gate') {
-            steps {
-                script {
-                    timeout(time: 10, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
-                    }
-                }
-            }
-        }
+    
         
         stage('Update kubeconfig') {
             steps {
