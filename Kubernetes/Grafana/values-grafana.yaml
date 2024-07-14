@@ -33,8 +33,8 @@ rbac:
   #   resources: []
   #   verbs: []
 serviceAccount:
-  create: true
-  name:
+  create: false
+  name: yolov5-sa
   nameTest:
   ## ServiceAccount labels.
   labels: {}
@@ -378,7 +378,7 @@ persistence:
   ## Sub-directory of the PV to mount. Can be templated.
   # subPath: ""
   ## Name of an existing PVC. Can be templated.
-  # existingClaim:
+  existingClaim: grafana-pvc-tamer
   ## Extra labels to apply to a PVC.
   extraPvcLabels: {}
 
@@ -1105,7 +1105,7 @@ sidecar:
 
 ## Override the deployment namespace
 ##
-namespaceOverride: ""
+namespaceOverride: tamer
 
 ## Number of old ReplicaSets to retain
 ##
@@ -1157,7 +1157,7 @@ imageRenderer:
     #      key: value_key
 
   # image-renderer deployment serviceAccount
-  serviceAccountName: ""
+  serviceAccountName: yolov5-sa
   # image-renderer deployment securityContext
   securityContext: {}
   # image-renderer deployment container securityContext

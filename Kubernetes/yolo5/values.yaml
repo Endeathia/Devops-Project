@@ -1,5 +1,5 @@
 appname: yolo5
-img: tamer153/yolov5-k8s:1.0.14
+img: tamer153/yolov5-k8s:1.0.20
 sqs: https://sqs.us-east-1.amazonaws.com/933060838752/tamer-sqs
 chaturl: tamer.atech-bot.click
 sa: yolov5-sa

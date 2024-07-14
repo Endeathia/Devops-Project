@@ -1,13 +1,15 @@
 [req]
-default_bits       = 2048
-prompt             = no
-default_md         = sha256
-distinguished_name = dn
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
 
-[dn]
-C  = US
-ST = State
-L  = City
-O  = Organization
-OU = Organizational Unit
-CN = Tamer-Load-Balancer-1677582904.us-west-1.elb.amazonaws.com
+[req_distinguished_name]
+C = US
+ST = New York
+L = Brooklyn
+O = Example Brooklyn Company
+CN = tamer.atech-bot.click
+
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth

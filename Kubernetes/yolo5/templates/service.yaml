@@ -4,7 +4,7 @@ metadata:
   name: yolo5-service
 spec:
   selector:    
-    app: yolo5 # {{ .Values.app }}
+    app: {{ .Values.appname }}
   type: NodePort
   ports:  
   - name: http

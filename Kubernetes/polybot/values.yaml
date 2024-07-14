@@ -5,7 +5,7 @@ role: arn:aws:iam::933060838752:role/tamer-eks-sqs-fullaccess
 MainPort: 8443
 bucket: tamerawsbucket
 chaturl: tamer.atech-bot.click
-img: tamer153/polybot-k8s:1.0.7
+img: tamer153/polybot-k8s:1.0.10
 host: tamer.atech-bot.click
 
 

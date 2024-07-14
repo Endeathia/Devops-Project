@@ -1,29 +1,29 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: grafana-pv
+  name: prometheus-pv-tamer
 spec:
   capacity:
-    storage: 2Gi
+    storage: 15Gi
+  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: gp2
+  storageClassName: manual
   awsElasticBlockStore:
-    volumeID: vol-09e94d170f0681385
+    volumeID: vol-05e283658274a8b1a
     fsType: ext4
-
 
 ---
 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grafana-pvc
+  name: prometheus-pvc-tamer
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: manual
   resources:
     requests:
-      storage: 2Gi
-  storageClassName: gp2
+      storage: 5Gi
