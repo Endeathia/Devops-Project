@@ -1,44 +1,3 @@
-alertmanager:
-  alertmanagerSpec:
-    storage:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: "manual"
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 5Gi
-    volumeClaimTemplates:
-    - metadata:
-        name: alertmanager-pvc-tamer
-      spec:
-        storageClassName: "manual"
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 5Gi
-
-prometheus:
-  prometheusSpec:
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: "manual"
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 15Gi
-
-grafana:
-  persistence:
-    enabled: true
-    storageClassName: "manual"
-    accessModes:
-      - ReadWriteOnce
-    size: 15Gi
-    finalizers:
-      - kubernetes.io/pvc-protection
-
 nodeExporter:
   enabled: true
   service:
@@ -47,3 +6,24 @@ nodeExporter:
 
 kubeStateMetrics:
   enabled: true
+
+replicaCount: 1
+
+server:
+  persistentVolume:
+    enabled: true
+    existingClaim: tamer-prometheus-new
+    storageClass: gp2
+    size: 15Gi
+
+alertmanager:
+  enabled: true
+  persistence:
+    enabled: true
+    existingClaim: tamer-alertmanager-new
+    size: 2Gi
+  podSecurityContext:
+    runAsUser: 65534
+    runAsNonRoot: true
+    runAsGroup: 65534
+    fsGroup: 65534
