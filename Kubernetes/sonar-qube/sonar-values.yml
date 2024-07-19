@@ -1,0 +1,25 @@
+## Global parameters
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  storageClass: ""
+  compatibility:
+    openshift:
+      adaptSecurityContext: auto
+
+## PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    username: bn_sonarqube
+    password: admin153 # Using a direct password for simplicity
+    database: bitnami_sonarqube
+  primary:
+    persistence:
+      enabled: false # Disable persistence
+
+## SonarQube configuration
+sonarqubeUsername: admin
+sonarqubePassword: admin153
+

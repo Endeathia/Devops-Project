@@ -13,6 +13,21 @@ pipeline {
                 git branch: 'main', credentialsId: 'GitHubJuly', url: 'https://github.com/Endeathia/Devops-Project.git'
             }
         }
+
+        stage('SonarQube Scan') {
+            steps {
+                script {
+                    println("=====================================${STAGE_NAME}=====================================")
+                    withCredentials([string(credentialsId: 'sonar1907')]) {
+                        sh "sonar-scanner \
+                        -Dsonar.projectKey=telegram\
+                        -Dsonar.sources=./ \
+                        -Dsonar.host.url=https://tamer-sonar.atech-bot.click/ \
+                        -Dsonar.login=${env.sonar1907}"
+                    }
+                }
+            }
+        }
     
         
         stage('Update kubeconfig') {
