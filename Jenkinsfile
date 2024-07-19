@@ -18,6 +18,7 @@ pipeline {
             steps {
                 script {
                     println("=====================================${STAGE_NAME}=====================================")
+                    withSonarQubeEnv('sonar-server') {
                     withCredentials([string(credentialsId: 'sonar1907', variable: 'SONAR_TOKEN')]) {
                         sh "${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=telegram\
@@ -27,6 +28,7 @@ pipeline {
                     }
                 }
             }
+        }
         }
 
         stage('Quality gate'){
