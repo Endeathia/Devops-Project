@@ -19,7 +19,7 @@ pipeline {
                 script {
                     println("=====================================${STAGE_NAME}=====================================")
                     withCredentials([string(credentialsId: 'sonar1907', variable: 'SONAR_TOKEN')]) {
-                        sh "{SCANNER_HOME}/bin/sonar-scanner \
+                        sh "${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=telegram\
                         -Dsonar.sources=./ \
                         -Dsonar.host.url=https://tamer-sonar.atech-bot.click/ \
