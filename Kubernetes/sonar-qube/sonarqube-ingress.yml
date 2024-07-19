@@ -28,4 +28,4 @@ spec:
   tls:
   - hosts:
     - tamer-sonar.atech-bot.click
-    secretName: tamer-sonar-tls
+    secretName: tamer-sonar-new
