@@ -8,3 +8,5 @@ containerPorts:
 
 hostNetwork: false
 hostPID: false
+
+replicaCount: 1
