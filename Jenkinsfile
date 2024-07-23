@@ -23,7 +23,7 @@ pipeline {
                         sh "${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=telegram\
                         -Dsonar.sources=./ \
-                        -Dsonar.host.url=https://tamer-sonar.atech-bot.click/ \
+                        -Dsonar.host.url=https://sonarqube.atech-bot.click/ \
                         -Dsonar.login=${SONAR_TOKEN}"
                     }
                 }
