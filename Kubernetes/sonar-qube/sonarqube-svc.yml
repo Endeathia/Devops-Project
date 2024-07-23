@@ -9,3 +9,4 @@ spec:
     targetPort: 9000
   selector:
     app.kubernetes.io/instance: tamer-sonar
+#
